@@ -18,7 +18,7 @@ import java.util.List;
 public class ErrorHandler {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConditionNotMetException(ConditionNotMetException e) {
         log.warn("Validation failed (condition not met). details={}", e.getMessage());
         return getErrorResponse(e);
@@ -28,7 +28,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException e) {
         log.warn("Resource not found. details={}", e.getMessage());
-        return new ErrorResponse("Unexpected server error", List.of());
+        return new ErrorResponse(e.getMessage(), List.of());
     }
 
 
