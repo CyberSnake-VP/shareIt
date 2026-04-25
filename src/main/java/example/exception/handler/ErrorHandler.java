@@ -1,0 +1,72 @@
+package example.exception.handler;
+
+import example.exception.ConditionNotMetException;
+import example.exception.NotFoundException;
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Comparator;
+import java.util.List;
+
+@RestControllerAdvice
+@Slf4j
+public class ErrorHandler {
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErrorResponse handleConditionNotMetException(ConditionNotMetException e) {
+        log.warn("Validation failed (condition not met). details={}", e.getMessage());
+        return getErrorResponse(e);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
+        log.warn("Resource not found. details={}", e.getMessage());
+        return new ErrorResponse("Unexpected server error", List.of());
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidation(MethodArgumentNotValidException e) {
+        List<ViolationResponse> violations = e.getBindingResult().getFieldErrors().stream()
+                .map(err -> new ViolationResponse(err.getField(), err.getDefaultMessage()))
+                .distinct()
+                .toList();
+
+        log.warn("Validation failed (argument not valid). violationsCount={}", violations.size());
+
+        return new ErrorResponse("Validation failed", violations);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleConstraintViolation(ConstraintViolationException e) {
+        List<ViolationResponse> violations = e.getConstraintViolations().stream()
+                .sorted(Comparator.comparing(v->v.getPropertyPath().toString()))
+                .map(v-> new ViolationResponse(v.getPropertyPath().toString(), v.getMessage()))
+                .distinct()
+                .toList();
+        log.warn("Validation failed (constraint violation). violationsCount={}", violations.size());
+        return new ErrorResponse("Validation failed", violations);
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleServerException(Exception e) {
+        log.error("Server error. details={}", e.getMessage());
+        return getErrorResponse(e);
+    }
+
+
+    private ErrorResponse getErrorResponse(Throwable throwable) {
+        return new ErrorResponse(throwable.getMessage(), List.of());
+    }
+}
