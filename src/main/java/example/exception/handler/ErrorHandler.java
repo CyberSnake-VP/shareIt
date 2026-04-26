@@ -65,6 +65,12 @@ public class ErrorHandler {
         return getErrorResponse(e);
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
+        log.warn("Validation failed (argument not valid). details={}", e.getMessage());
+        return getErrorResponse(e);
+    }
 
     private ErrorResponse getErrorResponse(Throwable throwable) {
         return new ErrorResponse(throwable.getMessage(), List.of());

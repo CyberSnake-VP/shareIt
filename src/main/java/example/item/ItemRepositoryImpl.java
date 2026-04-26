@@ -2,35 +2,44 @@ package example.item;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ItemRepositoryImpl implements ItemRepository{
-    private final Map<Long, List<Item>> items = new HashMap<>();
-    AtomicLong generatorId = new AtomicLong(1);
+public class ItemRepositoryImpl implements ItemRepository {
 
-    
+    private final Map<Long, List<Item>> items = new HashMap<>();
+    private final AtomicLong generatorId = new AtomicLong(1);
+
+
     @Override
     public Item create(Long ownerId, Item item) {
-        return null;
+        if(ownerId == null || item == null) {
+            return null;
+        }
+        item.setId(generatorId.getAndIncrement());
+        item.setOwner(ownerId);
+        items.computeIfAbsent(ownerId, k -> new ArrayList<>()).add(item);
+        return item;
     }
 
     @Override
     public List<Item> getAll(Long ownerId) {
-        return List.of();
+        if (ownerId == null) {
+            return Collections.emptyList();
+        }
+        return new ArrayList<>(items.getOrDefault(ownerId, new ArrayList<>()));
     }
 
     @Override
-    public Item getById(Long ownerId, Long itemId) {
-        return null;
-    }
+    public Optional<Item> getById(Long ownerId, Long itemId) {
+        if (ownerId == null || itemId == null) {
+            return Optional.empty();
+        }
 
-    @Override
-    public Item update(Long ownerId, Long itemId, Item item) {
-        return null;
+        return Optional.ofNullable(items.get(ownerId))
+                .flatMap(l -> l.stream()
+                        .filter(i -> i.getId().equals(itemId))
+                        .findFirst());
     }
-
 }
