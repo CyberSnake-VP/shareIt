@@ -9,6 +9,6 @@ public record CreateItemRequest(
         @NotBlank(message = "Description is required")
         String description,
         @NotNull(message = "Available is required")
-        boolean available
+        Boolean available
 ) {
 }

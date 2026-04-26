@@ -41,4 +41,9 @@ public class UserRepositoryImpl implements UserRepository {
         return users.values().stream()
                 .anyMatch(user -> Objects.equals(user.getEmail(), email));
     }
+
+    @Override
+    public boolean existById(Long id) {
+        return users.get(id) != null;
+    }
 }

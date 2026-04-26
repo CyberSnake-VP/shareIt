@@ -42,4 +42,19 @@ public class ItemRepositoryImpl implements ItemRepository {
                         .filter(i -> i.getId().equals(itemId))
                         .findFirst());
     }
+
+    @Override
+    public Item update(Long ownerId, Long itemId, Item item) {
+        List<Item> ownerItems = items.get(ownerId);
+        if (ownerItems == null) {
+            return null;
+        }
+        for (int i = 0; i < ownerItems.size(); i++) {
+            if(ownerItems.get(i).getId().equals(itemId)) {
+                ownerItems.set(i, item);
+                return item;
+            }
+        }
+        return null;
+    }
 }
