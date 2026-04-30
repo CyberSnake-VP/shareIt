@@ -1,0 +1,33 @@
+### настройки spring data jpa и sql initialisation
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none     # не создаём таблицы (используем Flyway/схему)
+    properties:
+      hibernate:
+        format_sql: true  # красивое форматирование SQL
+        show_sql: true    # показывать SQL в консоли
+        use_sql_comments: true   # комментарии в SQL
+        jdbc:
+          batch_size: 20  # батчинг для производительности
+
+  main:
+    banner-mode: off
+
+  sql:
+    init:
+      mode: always  # всегда выполнять schema.sql
+
+
+# логирование
+logging:
+  level:
+    org:
+      springframework:
+        jpa: info  # детали JPA
+        transaction: info  # транзакции
+        web: info   # HTTP запросы
+
+    org.hibernate:
+      SQL: info                         # SQL запросы
+      type: info

@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16.1
+    container_name: postgres-share-it
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=shareit
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d shareit"]
+      timeout: 5s
+      interval: 5s
+      retries: 10

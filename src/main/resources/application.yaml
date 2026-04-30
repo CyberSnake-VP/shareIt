@@ -11,7 +11,6 @@ spring:
        jdbc:
          batch_size: 20  # батчинг для производительности
 
-
   sql:
     init:
       mode: always  # всегда выполнять schema.sql
@@ -21,21 +20,18 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: "jdbc:postgresql://localhost:5432/shareit"
-    username: "root"
-    password: "root"
+    username: "postgres"
+    password: "password"
 
 server:
   port: 8080
 
-# логирование
+# Для продакшена логирование
 logging:
   level:
     org:
       springframework:
-        jpa: INFO  # детали JPA
-        transaction: INFO  # транзакции
-        web: INFO   # HTTP запросы
-
+        jpa: warn
+        web: warn
     org.hibernate:
-      SQL: DEBUG                         # SQL запросы
-      type: TRACE                        # параметры запросов (только для разработки)
+      SQL: warn
