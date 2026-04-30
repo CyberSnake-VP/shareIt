@@ -19,10 +19,10 @@ public class UserMapper {
     }
 
     public static User toUser(UpdateUserRequest request, User user) {
-        if(request.hasEmail()) {
+        if (request.hasEmail()) {
             user.setEmail(request.email());
         }
-        if(request.hasName()) {
+        if (request.hasName()) {
             user.setName(request.name());
         }
         return user;

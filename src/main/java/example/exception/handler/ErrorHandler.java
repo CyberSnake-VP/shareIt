@@ -49,8 +49,8 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolation(ConstraintViolationException e) {
         List<ViolationResponse> violations = e.getConstraintViolations().stream()
-                .sorted(Comparator.comparing(v->v.getPropertyPath().toString()))
-                .map(v-> new ViolationResponse(v.getPropertyPath().toString(), v.getMessage()))
+                .sorted(Comparator.comparing(v -> v.getPropertyPath().toString()))
+                .map(v -> new ViolationResponse(v.getPropertyPath().toString(), v.getMessage()))
                 .distinct()
                 .toList();
         log.warn("Validation failed (constraint violation). violationsCount={}", violations.size());

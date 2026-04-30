@@ -25,13 +25,13 @@ public class ItemMapper {
 
     public static Item toItemUpdate(UpdateItemRequest request, Item item) {
 
-        if(request.hasName()) {
+        if (request.hasName()) {
             item.setName(request.name());
         }
-        if(request.hasDescription()) {
+        if (request.hasDescription()) {
             item.setDescription(request.description());
         }
-        if(request.hasAvailable()) {
+        if (request.hasAvailable()) {
             item.setAvailable(request.available());
         }
 

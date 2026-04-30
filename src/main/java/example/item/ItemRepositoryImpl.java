@@ -14,7 +14,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item create(Long ownerId, Item item) {
-        if(ownerId == null || item == null) {
+        if (ownerId == null || item == null) {
             return null;
         }
         item.setId(generatorId.getAndIncrement());
@@ -50,7 +50,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             return null;
         }
         for (int i = 0; i < ownerItems.size(); i++) {
-            if(ownerItems.get(i).getId().equals(itemId)) {
+            if (ownerItems.get(i).getId().equals(itemId)) {
                 ownerItems.set(i, item);
                 return item;
             }

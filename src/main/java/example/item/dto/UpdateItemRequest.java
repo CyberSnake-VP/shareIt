@@ -14,6 +14,6 @@ public record UpdateItemRequest(
     }
 
     public boolean hasAvailable() {
-         return available != null;
+        return available != null;
     }
 }

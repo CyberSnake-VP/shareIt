@@ -10,7 +10,7 @@ public record CreateUserRequest(
         String name,
 
         @NotBlank(message = "Email is required")
-        @Email(message = "Email is invalid" , regexp = ".+@.+\\..+")
+        @Email(message = "Email is invalid", regexp = ".+@.+\\..+")
         String email
 ) {
 

@@ -5,7 +5,6 @@ import example.item.dto.CreateItemRequest;
 import example.item.dto.ItemMapper;
 import example.item.dto.ItemResponse;
 import example.item.dto.UpdateItemRequest;
-import example.user.User;
 import example.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
