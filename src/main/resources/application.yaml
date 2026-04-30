@@ -1,0 +1,41 @@
+### настройки spring data jpa и sql initialisation
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none     # не создаём таблицы (используем Flyway/схему)
+    properties:
+     hibernate:
+       format_sql: true  # красивое форматирование SQL
+       show_sql: true    # показывать SQL в консоли
+       use_sql_comments: false   # комментарии в SQL
+       jdbc:
+         batch_size: 20  # батчинг для производительности
+
+
+  sql:
+    init:
+      mode: always  # всегда выполнять schema.sql
+
+
+ # Настройки DataSource to Postgres DB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/shareit"
+    username: "root"
+    password: "root"
+
+server:
+  port: 8080
+
+# логирование
+logging:
+  level:
+    org:
+      springframework:
+        jpa: INFO  # детали JPA
+        transaction: INFO  # транзакции
+        web: INFO   # HTTP запросы
+
+    org.hibernate:
+      SQL: DEBUG                         # SQL запросы
+      type: TRACE                        # параметры запросов (только для разработки)
