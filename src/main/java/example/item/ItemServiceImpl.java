@@ -1,5 +1,6 @@
 package example.item;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import example.exception.NotFoundException;
 import example.item.dto.CreateItemRequest;
 import example.item.dto.ItemMapper;
@@ -30,10 +31,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponse create(Long ownerId, CreateItemRequest request) {
         log.info("Item add started: ownerId={}, itemName={}", ownerId, request.name());
 
-        User owner = userRepository.findById(ownerId).orElseThrow(()-> {
-            log.warn("Item add failed: owner not found, ownerId={}", ownerId);
-            return new NotFoundException(OWNER_NOT_FOUND);
-        });
+        log.debug("Item add: checking ownerId={}", ownerId);
+        User owner = getOwnerOrThrow(ownerId);
 
         Item item = ItemMapper.toItem(request, owner);
         Item saved = itemRepository.save(item);
@@ -44,127 +43,89 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemResponse> getAll(Long ownerId) {
-        return List.of();
+        log.info("Get all items started: ownerId={}", ownerId);
+
+        log.debug("Get all items by id: checking ownerId={}", ownerId);
+        getOwnerOrThrow(ownerId);
+
+        List<Item> items = itemRepository.findAllByOwnerId(ownerId);
+
+        if (items.isEmpty()) {
+            log.info("Not found items for ownerId={}", ownerId);
+        }
+
+        log.info("Get all items completed: ownerId={}, itemsCount={}", ownerId, items.size());
+        return ItemMapper.toResponses(items);
     }
 
     @Override
-    public ItemResponse getById(Long ownerId, Long itemId) {
-        return null;
+    public ItemResponse getById(Long itemId, Long ownerId) {
+        log.info("Get by id items started: ownerId={}, itemId={}", ownerId, itemId);
+
+        log.debug("Get by id items: checking ownerId={}", ownerId);
+        getOwnerOrThrow(ownerId);
+
+        Item item = getItemByIdAndOwnerIdOrThrow(itemId, ownerId);
+
+        log.info("Get by id items completed: ownerId={}, itemId={}", ownerId, itemId);
+        return ItemMapper.toResponse(item);
     }
 
     @Override
     public ItemResponse update(Long ownerId, Long itemId, UpdateItemRequest request) {
-        return null;
+        log.info("Update item started: itemId={}, ownerId={}", itemId, ownerId);
+
+        log.debug("Update item: checking ownerId={}", ownerId);
+        getOwnerOrThrow(ownerId);
+
+        log.debug("Update item: checking itemId={}, ownerId={}", itemId, ownerId);
+        Item existingItem = getItemByIdAndOwnerIdOrThrow(itemId, ownerId);
+
+        Item updatedItem = ItemMapper.toItemUpdate(request, existingItem);
+        itemRepository.save(updatedItem);
+
+        log.info("Update item completed: itemId={}, ownerId={}", itemId, ownerId);
+        return ItemMapper.toResponse(updatedItem);
     }
 
     @Override
     public List<ItemResponse> search(Long ownerId, String text) {
-        return List.of();
+        log.info("Search items started: ownerId={}, text={}", ownerId, text);
+
+        if (text == null || text.isBlank()) {
+            log.debug("Item search: text is empty or null, text={}", text);
+            return Collections.emptyList();
+        }
+
+        log.debug("Search items: checking ownerId={}", ownerId);
+        getOwnerOrThrow(ownerId);
+
+        BooleanExpression expression = QItem.item.owner.id.eq(ownerId)
+                .and(QItem.item.name.containsIgnoreCase(text)
+                        .or(QItem.item.description.containsIgnoreCase(text)));
+
+        Iterable<Item> foundItems = itemRepository.findAll(expression);
+
+        log.info("Search items completed");
+        return ItemMapper.toResponses(foundItems);
     }
 
-//    @Override
-//    public ItemResponse create(Long ownerId, CreateItemRequest request) {
-//        log.info("Item add started: ownerId={}, itemName={}", ownerId, request.name());
-//
-//        if (!userRepository.existsById(ownerId)) {
-//            log.warn("Item add failed: owner not found, ownerId={}", ownerId);
-//            throw new NotFoundException(OWNER_NOT_FOUND);
-//        }
-//
-//        Item item = itemRepository.create(ownerId, ItemMapper.toItem(request));
-//
-//        if (item != null) {
-//            log.info("Item add completed: ownerId={}, itemId={}", ownerId, item.getId());
-//            return ItemMapper.toResponse(item);
-//        }
-//        throw new IllegalArgumentException(ITEM_NOT_CREATED);
-//    }
-//
-//    @Override
-//    public List<ItemResponse> getAll(Long ownerId) {
-//        log.info("Get all items started: ownerId={}", ownerId);
-//
-//        if (!userRepository.existsById(ownerId)) {
-//            log.warn("Get all items failed: owner not found, ownerId={}", ownerId);
-//            throw new NotFoundException(OWNER_NOT_FOUND);
-//        }
-//        List<Item> items = itemRepository.getAll(ownerId);
-//        log.info("Get all items completed: ownerId={}, itemsCount={}", ownerId, items.size());
-//        return items.stream().map(ItemMapper::toResponse).toList();
-//    }
-//
-//    @Override
-//    public ItemResponse getById(Long ownerId, Long itemId) {
-//        log.info("Item get by id started: ownerId={}, itemId={}", ownerId, itemId);
-//
-//        if (!userRepository.existsById(ownerId)) {
-//            log.warn("Get by id failed: owner not found, ownerId={}", ownerId);
-//            throw new NotFoundException(OWNER_NOT_FOUND);
-//        }
-//
-//        Item item = itemRepository.getById(ownerId, itemId)
-//                .orElseThrow(() -> {
-//                    log.warn("Item get by id failed: item not found, itemId={}", itemId);
-//                    return new NotFoundException(ITEM_NOT_FOUND);
-//                });
-//
-//        log.info("Item get by id completed: ownerId={}, itemId={}", ownerId, itemId);
-//        return ItemMapper.toResponse(item);
-//    }
-//
-//    @Override
-//    public ItemResponse update(Long ownerId, Long itemId, UpdateItemRequest request) {
-//        log.info("Item update started: ownerId={}, itemId={}", ownerId, itemId);
-//
-//        if (!userRepository.existsById(ownerId)) {
-//            log.warn("Update failed: owner not found, ownerId={}", ownerId);
-//            throw new NotFoundException(OWNER_NOT_FOUND);
-//        }
-//
-//        Item oldItem = itemRepository.getById(ownerId, itemId)
-//                .orElseThrow(() -> {
-//                    log.warn("Item update failed: item not found, itemId={}", itemId);
-//                    return new NotFoundException(ITEM_NOT_FOUND);
-//                });
-//
-//        Item updatedItem = ItemMapper.toItemUpdate(request, oldItem);
-//
-//        updatedItem = itemRepository.update(ownerId, itemId, updatedItem);
-//
-//        log.info("Item update completed: ownerId={}, itemId={}", ownerId, itemId);
-//        return ItemMapper.toResponse(updatedItem);
-//    }
-//
-//    @Override
-//    public List<ItemResponse> search(Long ownerId, String text) {
-//        log.info("Item search started: ownerId={}, text={}", ownerId, text);
-//
-//        if (!userRepository.existsById(ownerId)) {
-//            log.warn("Search failed: owner not found, ownerId={}", ownerId);
-//            throw new NotFoundException(OWNER_NOT_FOUND);
-//        }
-//
-//        if (text == null || text.isBlank()) {
-//            log.debug("Item search: text is empty or null, text={}", text);
-//            return Collections.emptyList();
-//        }
-//
-//        List<Item> allOwnerItems = itemRepository.getAll(ownerId);
-//        if (allOwnerItems.isEmpty()) {
-//            return Collections.emptyList();
-//        }
-//
-//        log.debug("Item search: checking text={}", text);
-//        List<Item> findItems = allOwnerItems.stream()
-//                .filter(item ->
-//                        ((item.getName().toLowerCase().contains(text.toLowerCase()) ||
-//                                item.getDescription().toLowerCase().contains(text.toLowerCase())) &&
-//                                item.isAvailable())
-//                )
-//                .toList();
-//
-//        log.info("Item search completed: ownerId={}, text={}, itemsCount={}", ownerId, text, findItems.size());
-//        return findItems.stream().map(ItemMapper::toResponse).toList();
-//    }
+    private User getOwnerOrThrow(Long ownerId) {
+        return userRepository.findById(ownerId)
+                .orElseThrow(() -> {
+                    log.warn("Get all items failed: owner not found, ownerId={}", ownerId);
+                    return new NotFoundException(OWNER_NOT_FOUND);
+                });
+    }
+
+    private Item getItemByIdAndOwnerIdOrThrow(Long itemId, Long ownerId) {
+        return itemRepository.findByIdAndOwnerId(itemId, ownerId)
+                .orElseThrow(() -> {
+                    log.warn("Item get by id failed: item not found, itemId={}", itemId);
+                    return new NotFoundException(ITEM_NOT_FOUND);
+                });
+    }
+
+
 
 }

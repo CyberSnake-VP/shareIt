@@ -4,6 +4,9 @@ import example.item.Item;
 import example.user.User;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class ItemMapper {
 
@@ -23,6 +26,14 @@ public class ItemMapper {
         item.setAvailable(request.available());
         item.setOwner(owner);
         return item;
+    }
+
+    public static List<ItemResponse> toResponses(Iterable<Item> items) {
+        List<ItemResponse> responses = new ArrayList<>();
+        for (Item item : items) {
+            responses.add(toResponse(item));
+        }
+        return responses;
     }
 
     public static Item toItemUpdate(UpdateItemRequest request, Item item) {

@@ -17,8 +17,8 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private static final  String NOT_FOUND_USER_MESSAGE = "User not found";
-    private static final  String EMAIL_ALREADY_EXISTS_MESSAGE = "Email already exists";
+    private static final String NOT_FOUND_USER_MESSAGE = "User not found";
+    private static final String EMAIL_ALREADY_EXISTS_MESSAGE = "Email already exists";
 
     @Override
     public List<UserResponse> getAllUsers() {
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         log.info("Get user by id started: userId={}", id);
         User user = userRepository.findById(id)
-                        .orElseThrow(() -> {
+                .orElseThrow(() -> {
                     log.warn("Get user by id failed. not found userId={}", id);
                     return new NotFoundException(NOT_FOUND_USER_MESSAGE);
                 });

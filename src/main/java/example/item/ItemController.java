@@ -42,7 +42,7 @@ public class ItemController {
     public ItemResponse getById(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                                 @PathVariable Long itemId) {
         log.info("GET /items/{} started: ownerId={}", itemId, ownerId);
-        ItemResponse response = itemService.getById(ownerId, itemId);
+        ItemResponse response = itemService.getById(itemId, ownerId);
         log.info("GET /items/{} completed: ownerId={}, itemId={}", itemId, ownerId, response.id());
         return response;
     }
@@ -53,7 +53,7 @@ public class ItemController {
                                @PathVariable Long itemId,
                                @RequestBody @Valid UpdateItemRequest request) {
         log.info("PATCH /items/{} started: ownerId={}", itemId, ownerId);
-        ItemResponse response = itemService.update(ownerId, itemId, request);
+        ItemResponse response = itemService.update(itemId, ownerId, request);
         log.info("PATCH /items/{} completed: ownerId={}, itemId={}", itemId, ownerId, response.id());
         return response;
     }

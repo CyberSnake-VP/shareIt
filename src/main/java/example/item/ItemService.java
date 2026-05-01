@@ -11,9 +11,9 @@ public interface ItemService {
 
     List<ItemResponse> getAll(Long ownerId);
 
-    ItemResponse getById(Long ownerId, Long itemId);
+    ItemResponse getById(Long itemId, Long ownerId);
 
-    ItemResponse update(Long ownerId, Long itemId, UpdateItemRequest request);
+    ItemResponse update(Long itemId, Long ownerId, UpdateItemRequest request);
 
     List<ItemResponse> search(Long ownerId, String text);
 }
