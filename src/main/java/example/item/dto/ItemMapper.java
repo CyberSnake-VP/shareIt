@@ -1,6 +1,7 @@
 package example.item.dto;
 
 import example.item.Item;
+import example.user.User;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
@@ -10,16 +11,17 @@ public class ItemMapper {
         return new ItemResponse(
                 item.getId(),
                 item.getName(),
-                item.getOwner(),
+                item.getOwner().getId(),
                 item.getDescription(),
                 item.isAvailable());
     }
 
-    public static Item toItem(CreateItemRequest request) {
+    public static Item toItem(CreateItemRequest request, User owner) {
         Item item = new Item();
         item.setName(request.name());
         item.setDescription(request.description());
         item.setAvailable(request.available());
+        item.setOwner(owner);
         return item;
     }
 

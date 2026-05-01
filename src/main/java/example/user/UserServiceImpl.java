@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(CreateUserRequest request) {
         log.info("Create user started: email={}", request.email());
 
-        boolean isEmailExist = userRepository.existEmail(request.email());
+        boolean isEmailExist = userRepository.existsByEmail(request.email());
+
         if (isEmailExist) {
             log.warn("Create user failed: email already exists");
             throw new ConditionNotMetException(EMAIL_ALREADY_EXISTS_MESSAGE);
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         log.info("Update user started: userId={}", id);
 
         if (request.hasEmail()) {
-            boolean isEmailExist = userRepository.existEmail(request.email());
+            boolean isEmailExist = userRepository.existsByEmail(request.email());
             if (isEmailExist) {
                 log.warn("Update user failed: email already exists");
                 throw new ConditionNotMetException(EMAIL_ALREADY_EXISTS_MESSAGE);
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         log.info("Delete user by id started: userId={}", id);
-        userRepository.delete(id);
+        userRepository.deleteById(id);
         log.info("Delete user by id completed: userId={}", id);
     }
 }
