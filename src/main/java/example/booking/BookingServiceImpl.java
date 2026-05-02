@@ -158,6 +158,17 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingResponse> getAllByOwnerItem(Long ownerId, BookingState state) {
+        log.info("Get booking list by owner started: ownerId={}, state={}", ownerId, state);
+
+        // получаем текущее время
+        OffsetDateTime currentTime = OffsetDateTime.now();
+        // проверяем пользователя
+        getUserByIdOrThrow(ownerId);
+        // формируем список
+        List<Booking> bookings;
+
+
+
         return List.of();
     }
 

@@ -13,6 +13,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
 
     List<Booking> findAllByBookerId(Long bookerId);
 
+
+    // ========== ДЛЯ БУКЕРА (кто бронирует) ==========
+
     default List<Booking> findCurrentByBookerId(Long bookerId, OffsetDateTime currentTime) {
         QBooking booking = QBooking.booking;
         BooleanExpression expression = booking.booker.id.eq(bookerId)
@@ -45,6 +48,46 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
 
         return toList(findAll(expression));
     }
+
+
+    // ========== ДЛЯ ВЛАДЕЛЬЦА ВЕЩИ ==========
+
+    List<Booking> findAllByItemOwnerId(Long ownerId);
+
+    default List<Booking> findCurrentByOwnerId(Long ownerId, OffsetDateTime currentTime) {
+        QBooking booking = QBooking.booking;
+        BooleanExpression expression = booking.item.owner.id.eq(ownerId)
+                .and(booking.start.loe(currentTime))
+                .and(booking.end.goe(currentTime));
+
+        return toList(findAll(expression));
+    }
+
+    default List<Booking> findPastByOwnerId(Long ownerId, OffsetDateTime currentTime) {
+        QBooking booking = QBooking.booking;
+        BooleanExpression expression = booking.item.owner.id.eq(ownerId)
+                .and(booking.end.lt(currentTime));
+
+        return toList(findAll(expression));
+    }
+
+    default List<Booking> findFutureByOwnerId(Long ownerId, OffsetDateTime currentTime) {
+        QBooking booking = QBooking.booking;
+        BooleanExpression expression = booking.item.owner.id.eq(ownerId)
+                .and(booking.start.gt(currentTime));
+
+        return toList(findAll(expression));
+    }
+
+    default List<Booking> findByBookingStatusByOwnerId(Long ownerId, BookingStatus status) {
+        QBooking booking = QBooking.booking;
+        BooleanExpression expression = booking.item.owner.id.eq(ownerId)
+                .and(booking.status.eq(status));
+
+        return toList(findAll(expression));
+    }
+
+    // ========== ВСПОМОГАТЕЛЬНЫЙ МЕТОД ==========
 
     default <T> List<T> toList(Iterable<T> iterable) {
         List<T> result = new ArrayList<>();
