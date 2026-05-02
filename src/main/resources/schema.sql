@@ -38,13 +38,13 @@ CREATE INDEX IF NOT EXISTS idx_bookings_booker_id ON bookings (booker_id);
 CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings (status);
 
 -- Частый запрос: бронирования пользователя по статусу
-CREATE INDEX idx_bookings_booker_status ON bookings (booker_id, status);
+CREATE INDEX IF NOT EXISTS idx_bookings_booker_status ON bookings (booker_id, status);
 
 -- Частый запрос: пересечение дат для предмета
-CREATE INDEX idx_bookings_item_dates ON bookings (item_id, start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_bookings_item_dates ON bookings (item_id, start_date, end_date);
 
 -- Частый запрос: владелец вещи + статус
-CREATE INDEX idx_bookings_owner_status ON bookings (item_id, status);
+CREATE INDEX IF NOT EXISTS idx_bookings_owner_status ON bookings (item_id, status);
 
 
 -- ✅ Обязательно (частые запросы по владельцу)

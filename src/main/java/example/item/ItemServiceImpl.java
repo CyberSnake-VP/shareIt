@@ -113,7 +113,7 @@ public class ItemServiceImpl implements ItemService {
     private User getOwnerOrThrow(Long ownerId) {
         return userRepository.findById(ownerId)
                 .orElseThrow(() -> {
-                    log.warn("Get all items failed: owner not found, ownerId={}", ownerId);
+                    log.warn("Get user is failed: owner not found, ownerId={}", ownerId);
                     return new NotFoundException(OWNER_NOT_FOUND);
                 });
     }
@@ -121,11 +121,10 @@ public class ItemServiceImpl implements ItemService {
     private Item getItemByIdAndOwnerIdOrThrow(Long itemId, Long ownerId) {
         return itemRepository.findByIdAndOwnerId(itemId, ownerId)
                 .orElseThrow(() -> {
-                    log.warn("Item get by id failed: item not found, itemId={}", itemId);
+                    log.warn("Get item failed: item not found, itemId={}", itemId);
                     return new NotFoundException(ITEM_NOT_FOUND);
                 });
     }
-
 
 
 }

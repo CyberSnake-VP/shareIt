@@ -1,6 +1,8 @@
 package example.exception.handler;
 
+import example.exception.BookingConflictException;
 import example.exception.ConditionNotMetException;
+import example.exception.NotAvailableException;
 import example.exception.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,20 @@ public class ErrorHandler {
                 .toList();
         log.warn("Validation failed (constraint violation). violationsCount={}", violations.size());
         return new ErrorResponse("Validation failed", violations);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotAvailable(NotAvailableException e) {
+        log.error("Validation failed: item not available. details={}", e.getMessage());
+        return getErrorResponse(e);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBookingConflict(BookingConflictException e) {
+        log.error("Validation failed:  booking date conflict. details={}", e.getMessage());
+        return getErrorResponse(e);
     }
 
 
