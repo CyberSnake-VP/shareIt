@@ -167,9 +167,21 @@ public class BookingServiceImpl implements BookingService {
         // формируем список
         List<Booking> bookings;
 
+        switch (state) {
+            case ALL -> bookings = bookingRepository.findAllByItemOwnerId(ownerId);
+            case CURRENT -> bookings = bookingRepository.findCurrentByOwnerId(ownerId, currentTime); // текущие
+            case PAST -> bookings = bookingRepository.findPastByOwnerId(ownerId, currentTime); // завершенные
+            case FUTURE -> bookings = bookingRepository.findFutureByOwnerId(ownerId, currentTime); // будущие
+            case WAITING -> bookings = bookingRepository.findByBookingStatusByOwnerId(ownerId, BookingStatus.WAITING); // ожидающие подтверждения
+            case REJECTED -> bookings = bookingRepository.findByBookingStatusByOwnerId(ownerId, BookingStatus.REJECTED); // отклоненные
+            default -> {
+                log.warn("Get booking list by owner failed: state is incorrect, state={}", state);
+                throw new BookingConflictException(STATE_INCORRECT);
+            }
+        }
 
-
-        return List.of();
+        log.info("Get booking list by owner completed: ownerId={}, state={}", ownerId, state);
+        return bookings.stream().map(BookingMapper::toBookingResponse).toList();
     }
 
 
