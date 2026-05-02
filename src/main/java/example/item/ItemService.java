@@ -1,8 +1,6 @@
 package example.item;
 
-import example.item.dto.CreateItemRequest;
-import example.item.dto.ItemResponse;
-import example.item.dto.UpdateItemRequest;
+import example.item.dto.*;
 
 import java.util.List;
 
@@ -16,4 +14,6 @@ public interface ItemService {
     ItemResponse update(Long itemId, Long ownerId, UpdateItemRequest request);
 
     List<ItemResponse> search(Long ownerId, String text);
+
+    CommentResponse addComment(Long itemId, Long authorId, CreateCommentRequest request);
 }

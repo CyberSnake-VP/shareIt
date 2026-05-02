@@ -3,10 +3,7 @@ package example.item;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
-import example.item.dto.CreateItemRequest;
-import example.item.dto.ItemMapper;
-import example.item.dto.ItemResponse;
-import example.item.dto.UpdateItemRequest;
+import example.item.dto.*;
 import example.user.User;
 import example.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -115,6 +112,12 @@ public class ItemServiceImpl implements ItemService {
 
         log.info("Search items completed");
         return ItemMapper.toResponses(foundItems);
+    }
+
+    @Override
+    public CommentResponse addComment(Long itemId, Long authorId, CreateCommentRequest request) {
+        log.info("Add comment started: itemId={}, authorId={}", itemId, authorId);
+        return null;
     }
 
     private User getOwnerOrThrow(Long ownerId) {

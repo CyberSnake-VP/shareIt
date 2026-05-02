@@ -1,8 +1,6 @@
 package example.item;
 
-import example.item.dto.CreateItemRequest;
-import example.item.dto.ItemResponse;
-import example.item.dto.UpdateItemRequest;
+import example.item.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,5 +64,16 @@ public class ItemController {
         List<ItemResponse> responses = itemService.search(ownerId, text);
         log.info("GET /items/search completed: ownerId={}, text={}, count={}", ownerId, text, responses.size());
         return responses;
+    }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentResponse addComment(@PathVariable Long itemId,
+                                      @RequestHeader("X-Sharer-User-Id") Long authorId,
+                                      @RequestBody @Valid CreateCommentRequest request) {
+        log.info("POST /items/{}/comment started: authorId={}", itemId, authorId);
+        CommentResponse response = itemService.addComment(itemId, authorId, request);
+        log.info("POST /items/{}/comment completed: authorId={}", itemId, authorId);
+        return response;
     }
 }
