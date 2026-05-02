@@ -20,16 +20,35 @@ CREATE TABLE IF NOT EXISTS items
 
 CREATE TABLE IF NOT EXISTS bookings
 (
-    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    id         BIGINT GENERATED ALWAYS AS IDENTITY,
     start_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    end_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    item_id BIGINT NOT NULL,
-    booker_id BIGINT NOT NULL,
-    status varchar(100) NOT NULL,
+    end_date   TIMESTAMP WITH TIME ZONE NOT NULL,
+    item_id    BIGINT                   NOT NULL,
+    booker_id  BIGINT                   NOT NULL,
+    status     varchar(100)             NOT NULL,
     CONSTRAINT pk_key PRIMARY KEY (id),
     CONSTRAINT fk_bookings_items FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
     CONSTRAINT fk_bookings_users FOREIGN KEY (booker_id) REFERENCES users (id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE IF NOT EXISTS comments
+(
+    id           BIGINT GENERATED ALWAYS AS IDENTITY,
+    text         TEXT                     NOT NULL,
+    item_id      BIGINT                   NOT NULL,
+    author_id    BIGINT                   NOT NULL,
+    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    CONSTRAINT pk_comments PRIMARY KEY (id),
+    CONSTRAINT fk_comments_items FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
+    CONSTRAINT fk_comments_users FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_comments_item_id ON comments (item_id);
+CREATE INDEX IF NOT EXISTS idx_comments_author_id ON comments (author_id);
+CREATE INDEX IF NOT EXISTS idx_comments_created_date ON comments (created_date DESC);
+
+
 
 CREATE INDEX IF NOT EXISTS idx_bookings_item_id ON bookings (item_id);
 
