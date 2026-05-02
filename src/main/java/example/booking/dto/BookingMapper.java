@@ -23,8 +23,8 @@ public class BookingMapper {
                         booking.getBooker().getEmail(),
                         booking.getBooker().getName()
                 ),
-                booking.getStart(),
-                booking.getEnd(),
+                booking.getStart().toLocalDateTime(),
+                booking.getEnd().toLocalDateTime(),
                 booking.getStatus()
         );
     }

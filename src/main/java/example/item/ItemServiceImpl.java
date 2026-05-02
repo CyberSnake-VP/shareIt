@@ -1,6 +1,7 @@
 package example.item;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
 import example.item.dto.CreateItemRequest;
 import example.item.dto.ItemMapper;
@@ -25,6 +26,7 @@ public class ItemServiceImpl implements ItemService {
 
     private static final String ITEM_NOT_FOUND = "Item not found";
     private static final String OWNER_NOT_FOUND = "Owner not found";
+    private static final String NOT_OWNER_MESSAGE = "User is not the owner";
 
 
     @Override
@@ -72,16 +74,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponse update(Long ownerId, Long itemId, UpdateItemRequest request) {
+    public ItemResponse update(Long itemId, Long ownerId, UpdateItemRequest request) {
         log.info("Update item started: itemId={}, ownerId={}", itemId, ownerId);
 
         log.debug("Update item: checking ownerId={}", ownerId);
         getOwnerOrThrow(ownerId);
 
-        log.debug("Update item: checking itemId={}, ownerId={}", itemId, ownerId);
-        Item existingItem = getItemByIdAndOwnerIdOrThrow(itemId, ownerId);
+        Item item = getItemById(itemId);
 
-        Item updatedItem = ItemMapper.toItemUpdate(request, existingItem);
+        if (!item.getOwner().getId().equals(ownerId)) {
+            log.warn("Update item failed: user is not the owner, userId={}", ownerId);
+            throw new ConditionNotMetException(NOT_OWNER_MESSAGE);
+        }
+
+        Item updatedItem = ItemMapper.toItemUpdate(request, item);
         itemRepository.save(updatedItem);
 
         log.info("Update item completed: itemId={}, ownerId={}", itemId, ownerId);
@@ -101,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
         getOwnerOrThrow(ownerId);
 
         BooleanExpression expression = QItem.item.owner.id.eq(ownerId)
+                .and(QItem.item.available.eq(true))
                 .and(QItem.item.name.containsIgnoreCase(text)
                         .or(QItem.item.description.containsIgnoreCase(text)));
 
@@ -121,6 +128,14 @@ public class ItemServiceImpl implements ItemService {
     private Item getItemByIdAndOwnerIdOrThrow(Long itemId, Long ownerId) {
         return itemRepository.findByIdAndOwnerId(itemId, ownerId)
                 .orElseThrow(() -> {
+                    log.warn("Get item failed: item not found, itemId={}, ownerId={}", itemId, ownerId);
+                    return new NotFoundException(ITEM_NOT_FOUND);
+                });
+    }
+
+    private Item getItemById(Long itemId) {
+        return itemRepository.findById(itemId).
+                orElseThrow(() -> {
                     log.warn("Get item failed: item not found, itemId={}", itemId);
                     return new NotFoundException(ITEM_NOT_FOUND);
                 });
