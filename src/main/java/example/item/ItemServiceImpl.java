@@ -1,6 +1,8 @@
 package example.item;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import example.booking.Booking;
+import example.booking.BookingRepository;
 import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
 import example.item.dto.*;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,18 +23,20 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
 
     private static final String ITEM_NOT_FOUND = "Item not found";
     private static final String OWNER_NOT_FOUND = "Owner not found";
     private static final String NOT_OWNER_MESSAGE = "User is not the owner";
-
+    private static final String GET_BOOKING_ERROR_MESSAGE = "Booking no valid";
 
     @Override
     public ItemResponse create(Long ownerId, CreateItemRequest request) {
         log.info("Item add started: ownerId={}, itemName={}", ownerId, request.name());
 
         log.debug("Item add: checking ownerId={}", ownerId);
-        User owner = getOwnerOrThrow(ownerId);
+        User owner = getUserOrThrow(ownerId);
 
         Item item = ItemMapper.toItem(request, owner);
         Item saved = itemRepository.save(item);
@@ -45,7 +50,7 @@ public class ItemServiceImpl implements ItemService {
         log.info("Get all items started: ownerId={}", ownerId);
 
         log.debug("Get all items by id: checking ownerId={}", ownerId);
-        getOwnerOrThrow(ownerId);
+        getUserOrThrow(ownerId);
 
         List<Item> items = itemRepository.findAllByOwnerId(ownerId);
 
@@ -62,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
         log.info("Get by id items started: ownerId={}, itemId={}", ownerId, itemId);
 
         log.debug("Get by id items: checking ownerId={}", ownerId);
-        getOwnerOrThrow(ownerId);
+        getUserOrThrow(ownerId);
 
         Item item = getItemByIdAndOwnerIdOrThrow(itemId, ownerId);
 
@@ -75,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
         log.info("Update item started: itemId={}, ownerId={}", itemId, ownerId);
 
         log.debug("Update item: checking ownerId={}", ownerId);
-        getOwnerOrThrow(ownerId);
+        getUserOrThrow(ownerId);
 
         Item item = getItemById(itemId);
 
@@ -101,7 +106,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         log.debug("Search items: checking ownerId={}", ownerId);
-        getOwnerOrThrow(ownerId);
+        getUserOrThrow(ownerId);
 
         BooleanExpression expression = QItem.item.owner.id.eq(ownerId)
                 .and(QItem.item.available.eq(true))
@@ -117,10 +122,26 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public CommentResponse addComment(Long itemId, Long authorId, CreateCommentRequest request) {
         log.info("Add comment started: itemId={}, authorId={}", itemId, authorId);
-        return null;
+
+        // получаем пользователя
+        User author = getUserOrThrow(authorId);
+        // получаем item
+        Item item = getItemById(itemId);
+
+        // валидация бронирования
+        bookingRepository.findPastBookingByBookerAndItem(authorId, itemId, OffsetDateTime.now())
+                .orElseThrow(() -> {
+                    log.warn("Add comment failed: no completed booking found for authorId={}, itemId={}", authorId, itemId);
+                    return new ConditionNotMetException(GET_BOOKING_ERROR_MESSAGE);
+                });
+
+        Comment comment = CommentMapper.toComment(request, author, item);
+
+        log.info("Add comment completed: authorId={}, itemId={}", authorId, itemId);
+        return CommentMapper.toCommentResponse(commentRepository.save(comment));
     }
 
-    private User getOwnerOrThrow(Long ownerId) {
+    private User getUserOrThrow(Long ownerId) {
         return userRepository.findById(ownerId)
                 .orElseThrow(() -> {
                     log.warn("Get user is failed: owner not found, ownerId={}", ownerId);

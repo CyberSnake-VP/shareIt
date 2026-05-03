@@ -7,12 +7,21 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface BookingRepository extends JpaRepository<Booking, Long>, QuerydslPredicateExecutor<Booking> {
 
     List<Booking> findAllByBookerId(Long bookerId);
 
+    default Optional<Booking> findPastBookingByBookerAndItem(Long bookerId, Long itemId, OffsetDateTime currentTime) {
+        QBooking booking = QBooking.booking;
+        BooleanExpression expression = booking.booker.id.eq(bookerId)
+                .and(booking.item.id.eq(itemId))
+                .and(booking.end.lt(currentTime))
+                .and(booking.status.eq(BookingStatus.APPROVED));
+        return findOne(expression);
+    }
 
     // ========== ДЛЯ БУКЕРА (кто бронирует) ==========
 
@@ -86,6 +95,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
 
         return toList(findAll(expression));
     }
+
 
     // ========== ВСПОМОГАТЕЛЬНЫЙ МЕТОД ==========
 
