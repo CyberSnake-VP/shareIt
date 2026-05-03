@@ -29,5 +29,6 @@ public class Comment {
     private User author;
 
     // дата создания
-    private OffsetDateTime created = OffsetDateTime.now();
+    @Column(name = "created_date")
+    private OffsetDateTime createdDate = OffsetDateTime.now();
 }

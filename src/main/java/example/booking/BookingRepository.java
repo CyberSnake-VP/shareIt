@@ -14,12 +14,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
 
     List<Booking> findAllByBookerId(Long bookerId);
 
-    default Optional<Booking> findPastBookingByBookerAndItem(Long bookerId, Long itemId, OffsetDateTime currentTime) {
+    default Optional<Booking> findBookingByBookerAndItem(Long bookerId, Long itemId, OffsetDateTime currentTime) {
         QBooking booking = QBooking.booking;
         BooleanExpression expression = booking.booker.id.eq(bookerId)
                 .and(booking.item.id.eq(itemId))
-                .and(booking.end.lt(currentTime))
-                .and(booking.status.eq(BookingStatus.APPROVED));
+                .and(booking.status.eq(BookingStatus.APPROVED))
+                .and(booking.start.loe(currentTime));
         return findOne(expression);
     }
 

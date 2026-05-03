@@ -144,8 +144,10 @@ public class BookingServiceImpl implements BookingService {
             case CURRENT -> bookings = bookingRepository.findCurrentByBookerId(bookerId, currentTime); // текущие
             case PAST -> bookings = bookingRepository.findPastByBookerId(bookerId, currentTime); // завершенные
             case FUTURE -> bookings = bookingRepository.findFutureByBookerId(bookerId, currentTime); // будущие
-            case WAITING -> bookings = bookingRepository.findByBookingStatus(bookerId, BookingStatus.WAITING); // ожидающие подтверждения
-            case REJECTED -> bookings = bookingRepository.findByBookingStatus(bookerId, BookingStatus.REJECTED); // отклоненные
+            case WAITING ->
+                    bookings = bookingRepository.findByBookingStatus(bookerId, BookingStatus.WAITING); // ожидающие подтверждения
+            case REJECTED ->
+                    bookings = bookingRepository.findByBookingStatus(bookerId, BookingStatus.REJECTED); // отклоненные
             default -> {
                 log.warn("Get booking list by booker failed: state is incorrect, state={}", state);
                 throw new BookingConflictException(STATE_INCORRECT);
@@ -172,8 +174,10 @@ public class BookingServiceImpl implements BookingService {
             case CURRENT -> bookings = bookingRepository.findCurrentByOwnerId(ownerId, currentTime); // текущие
             case PAST -> bookings = bookingRepository.findPastByOwnerId(ownerId, currentTime); // завершенные
             case FUTURE -> bookings = bookingRepository.findFutureByOwnerId(ownerId, currentTime); // будущие
-            case WAITING -> bookings = bookingRepository.findByBookingStatusByOwnerId(ownerId, BookingStatus.WAITING); // ожидающие подтверждения
-            case REJECTED -> bookings = bookingRepository.findByBookingStatusByOwnerId(ownerId, BookingStatus.REJECTED); // отклоненные
+            case WAITING ->
+                    bookings = bookingRepository.findByBookingStatusByOwnerId(ownerId, BookingStatus.WAITING); // ожидающие подтверждения
+            case REJECTED ->
+                    bookings = bookingRepository.findByBookingStatusByOwnerId(ownerId, BookingStatus.REJECTED); // отклоненные
             default -> {
                 log.warn("Get booking list by owner failed: state is incorrect, state={}", state);
                 throw new BookingConflictException(STATE_INCORRECT);

@@ -1,8 +1,8 @@
 package example.item;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import example.booking.Booking;
 import example.booking.BookingRepository;
+import example.exception.BookingConflictException;
 import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
 import example.item.dto.*;
@@ -129,10 +129,10 @@ public class ItemServiceImpl implements ItemService {
         Item item = getItemById(itemId);
 
         // валидация бронирования
-        bookingRepository.findPastBookingByBookerAndItem(authorId, itemId, OffsetDateTime.now())
+        bookingRepository.findBookingByBookerAndItem(authorId, itemId, OffsetDateTime.now())
                 .orElseThrow(() -> {
                     log.warn("Add comment failed: no completed booking found for authorId={}, itemId={}", authorId, itemId);
-                    return new ConditionNotMetException(GET_BOOKING_ERROR_MESSAGE);
+                    return new BookingConflictException(GET_BOOKING_ERROR_MESSAGE);
                 });
 
         Comment comment = CommentMapper.toComment(request, author, item);
@@ -158,12 +158,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Item getItemById(Long itemId) {
-        return itemRepository.findById(itemId).
-                orElseThrow(() -> {
+        return itemRepository.findById(itemId)
+                        .orElseThrow(() -> {
                     log.warn("Get item failed: item not found, itemId={}", itemId);
                     return new NotFoundException(ITEM_NOT_FOUND);
                 });
     }
-
 
 }
