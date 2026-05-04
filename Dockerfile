@@ -1,5 +1,10 @@
 FROM amazoncorretto:21-alpine
 
+#Установка таймзон (для тестов).. т.к. тесты просто без временной зоны приходят
+RUN apk add --no-cache tzdata
+ENV TZ=Europe/Moscow
+# Всё! Alpine сам создаст /etc/localtime и /etc/timezone
+
 #Создаем рабочую папку внутри контейнера
 WORKDIR /app
 

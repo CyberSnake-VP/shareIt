@@ -9,6 +9,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit # под-е к бд внутри контейнера
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root
+      - TZ=Europe/Moscow
     depends_on:
       db:
         condition: service_healthy
@@ -16,7 +17,7 @@ services:
       - shareit-network
 
   db:
-    image: postgres:16.1
+    image: postgres:16.1-alpine
     container_name: shareit-db
     ports:
       - "5432:5432"
@@ -24,11 +25,13 @@ services:
       - POSTGRES_DB=shareit
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d shareit"]
       timeout: 5s
       interval: 5s
-      retries: 10
+      retries: 5
     networks:
       - shareit-network
 
@@ -36,3 +39,6 @@ services:
 networks:
   shareit-network:
     driver: bridge
+
+volumes:
+  postgres_data:
