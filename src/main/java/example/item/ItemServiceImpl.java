@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,7 +107,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemCommentResponse getById(Long itemId) {
-        log.info("Get by id items started: itemId={}",itemId);
+        log.info("Get by id items started: itemId={}", itemId);
 
         // получаем item
         Item item = getItemById(itemId);
@@ -216,8 +215,8 @@ public class ItemServiceImpl implements ItemService {
     private Booking getLastBooking(List<Booking> bookings) {
         OffsetDateTime now = OffsetDateTime.now();
         return bookings.stream()
-                .filter(b-> b.getStatus() == BookingStatus.APPROVED)
-                .filter(b-> b.getEnd().isBefore(now))
+                .filter(b -> b.getStatus() == BookingStatus.APPROVED)
+                .filter(b -> b.getEnd().isBefore(now))
                 .max(Comparator.comparing(Booking::getEnd))
                 .orElse(null);
     }
@@ -225,8 +224,8 @@ public class ItemServiceImpl implements ItemService {
     private Booking getNextBooking(List<Booking> bookings) {
         OffsetDateTime now = OffsetDateTime.now();
         return bookings.stream()
-                .filter(b->b.getStatus()== BookingStatus.APPROVED)
-                .filter(b-> b.getStart().isAfter(now))
+                .filter(b -> b.getStatus() == BookingStatus.APPROVED)
+                .filter(b -> b.getStart().isAfter(now))
                 .min(Comparator.comparing(Booking::getStart))
                 .orElse(null);
     }

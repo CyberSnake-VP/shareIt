@@ -23,7 +23,7 @@ public class CommentMapper {
 
     public static List<CommentResponse> toCommentResponse(Iterable<Comment> comments) {
         List<CommentResponse> response = new ArrayList<>();
-        for (Comment comment: comments) {
+        for (Comment comment : comments) {
             response.add(toCommentResponse(comment));
         }
         return response;

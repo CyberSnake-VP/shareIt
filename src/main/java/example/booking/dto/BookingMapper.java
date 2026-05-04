@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
