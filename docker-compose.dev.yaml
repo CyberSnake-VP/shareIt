@@ -1,0 +1,8 @@
+services:
+  app:
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev    # Включаем dev-профиль Spring
+
+    volumes:
+      - ./src:/app/src                # Твой код (не нужно пересобирать)
+      - ./logs:/app/logs              # Логи будут на твоем компьютере

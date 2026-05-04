@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8080" # Мой порт слева, внутри контейнера справа
     environment:
-      - SPRING_PROFILES_ACTIVE=docker # используем профиль для docker
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILE} # используем профиль для docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB} # под-е к бд внутри контейнера
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
@@ -27,8 +27,11 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # лимиты памяти и процессора
+    mem_limit: 512m
+    cpus: "0.5"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d shareit_prod"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       timeout: 5s
       interval: 5s
       retries: 5
