@@ -6,6 +6,7 @@ import example.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +14,12 @@ import java.util.List;
 public class CommentMapper {
 
     public static CommentResponse toCommentResponse(Comment comment) {
+        ZoneId clientZone = ZoneId.of("Europe/Moscow");
         return new CommentResponse(
                 comment.getId(),
                 comment.getText(),
                 comment.getAuthor().getName(),
-                comment.getCreatedDate().toLocalDateTime()
+                comment.getCreatedDate().atZoneSameInstant(clientZone).toLocalDateTime()
         );
     }
 

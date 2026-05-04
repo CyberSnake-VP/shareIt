@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Getter
 @Setter
@@ -30,5 +31,5 @@ public class Comment {
 
     // дата создания
     @Column(name = "created_date")
-    private OffsetDateTime createdDate = OffsetDateTime.now();
+    private OffsetDateTime createdDate = OffsetDateTime.now(ZoneOffset.UTC);
 }

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -133,7 +134,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("Get booking list by booker started: bookerId={}, state={}", bookerId, state);
 
         // получаем текущее время
-        OffsetDateTime currentTime = OffsetDateTime.now();
+        OffsetDateTime currentTime = OffsetDateTime.now(ZoneOffset.UTC);
         // проверяем пользователя
         getUserByIdOrThrow(bookerId);
         // подготавливаем список
@@ -163,7 +164,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("Get booking list by owner started: ownerId={}, state={}", ownerId, state);
 
         // получаем текущее время
-        OffsetDateTime currentTime = OffsetDateTime.now();
+        OffsetDateTime currentTime = OffsetDateTime.now(ZoneOffset.UTC);
         // проверяем пользователя
         getUserByIdOrThrow(ownerId);
         // формируем список

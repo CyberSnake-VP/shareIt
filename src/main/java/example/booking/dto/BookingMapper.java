@@ -15,7 +15,7 @@ public class BookingMapper {
         if (booking == null) {
             return null;
         }
-
+        ZoneId clientZone = ZoneId.of("Europe/Moscow");
         return new BookingResponse(
                 booking.getId(),
                 new BookingResponseShortItem(
@@ -27,18 +27,29 @@ public class BookingMapper {
                         booking.getBooker().getEmail(),
                         booking.getBooker().getName()
                 ),
-                booking.getStart().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime(),
-                booking.getEnd().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime(),
+                booking.getStart().atZoneSameInstant(clientZone).toLocalDateTime(),
+                booking.getEnd().atZoneSameInstant(clientZone).toLocalDateTime(),
                 booking.getStatus()
         );
     }
 
+    // я считаю что с сервера (клиента) приходит время в utc, потому что без временной зоны в тестах
+    // поэтому привожу работу приложения к единому времени, получил значит типа UTC значит буду считать это время как UTC
     public static Booking toBooking(CreateBookingRequest request, Item item, User booker) {
+        ZoneId clientZone = ZoneId.of("Europe/Moscow");
         Booking booking = new Booking();
         booking.setItem(item);
         booking.setBooker(booker);
-        booking.setStart(request.start().atZone(ZoneId.systemDefault()).toOffsetDateTime());
-        booking.setEnd(request.end().atZone(ZoneId.systemDefault()).toOffsetDateTime());
+        booking.setStart(
+                request.start()
+                        .atZone(clientZone)
+                        .toOffsetDateTime()
+                        .withOffsetSameInstant(ZoneOffset.UTC));
+        booking.setEnd(
+                request.end()
+                        .atZone(clientZone)
+                        .toOffsetDateTime()
+                        .withOffsetSameInstant(ZoneOffset.UTC));
         return booking;
     }
 }

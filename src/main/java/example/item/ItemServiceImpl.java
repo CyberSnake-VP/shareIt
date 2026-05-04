@@ -183,7 +183,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = getItemById(itemId);
 
         // валидация бронирования
-        bookingRepository.findBookingByBookerAndItem(authorId, itemId, OffsetDateTime.now())
+        bookingRepository.findBookingByBookerAndItem(authorId, itemId, OffsetDateTime.now(ZoneOffset.UTC))
                 .orElseThrow(() -> {
                     log.warn("Add comment failed: no completed booking found for authorId={}, itemId={}", authorId, itemId);
                     return new BookingConflictException(GET_BOOKING_ERROR_MESSAGE);
@@ -213,7 +213,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Booking getLastBooking(List<Booking> bookings) {
-        OffsetDateTime now = OffsetDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         return bookings.stream()
                 .filter(b -> b.getStatus() == BookingStatus.APPROVED)
                 .filter(b -> b.getEnd().isBefore(now))
@@ -222,7 +222,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Booking getNextBooking(List<Booking> bookings) {
-        OffsetDateTime now = OffsetDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         return bookings.stream()
                 .filter(b -> b.getStatus() == BookingStatus.APPROVED)
                 .filter(b -> b.getStart().isAfter(now))
