@@ -1,12 +1,11 @@
 services:
-
   app:
     build: . # образ из Dockerfile лежит в текущей папке
     container_name: shareit-app
     ports:
       - "8080:8080" # Мой порт слева, внутри контейнера справа
     environment:
-      - SPRING_PROFILES_ACTIVE=dev # используем профиль для docker
+      - SPRING_PROFILES_ACTIVE=docker # используем профиль для docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit # под-е к бд внутри контейнера
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root
@@ -15,7 +14,6 @@ services:
         condition: service_healthy
     networks:
       - shareit-network
-
 
   db:
     image: postgres:16.1
