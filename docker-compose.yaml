@@ -6,10 +6,10 @@ services:
       - "8080:8080" # Мой порт слева, внутри контейнера справа
     environment:
       - SPRING_PROFILES_ACTIVE=docker # используем профиль для docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit # под-е к бд внутри контейнера
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=root
-      - TZ=Europe/Moscow
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB} # под-е к бд внутри контейнера
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=${TZ}
     depends_on:
       db:
         condition: service_healthy
@@ -22,13 +22,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=shareit
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d shareit"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d shareit_prod"]
       timeout: 5s
       interval: 5s
       retries: 5

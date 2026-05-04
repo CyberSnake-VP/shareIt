@@ -19,9 +19,9 @@ spring:
  # Настройки DataSource to Postgres DB
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/shareit"
-    username: "postgres"
-    password: "root"
+    url: "jdbc:postgresql://localhost:5432/${POSTGRES_DB}"
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
 
 server:
   port: 8080

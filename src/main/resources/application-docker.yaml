@@ -1,10 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://db:5432/shareit
-    username: postgres
-    password: root
-    driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: validate     # не создаём таблицы (используем Flyway/схему)
