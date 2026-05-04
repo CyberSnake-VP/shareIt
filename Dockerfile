@@ -9,5 +9,7 @@ COPY target/*.jar app.jar
 # Говорим, что приложение работает на порту 8080
 EXPOSE 8080
 
-# Запускаем приложение
-ENTRYPOINT ["java","-Dspring.profiles.active=docker", "-jar", "app.jar"]
+# Запускаем приложение можно прям здесь указать профиль, но лучше в docker-compose
+#ENTRYPOINT ["java","-Dspring.profiles.active=docker", "-jar", "app.jar"]
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
