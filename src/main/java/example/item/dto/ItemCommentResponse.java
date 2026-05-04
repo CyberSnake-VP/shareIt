@@ -1,6 +1,7 @@
 package example.item.dto;
 
-import java.time.LocalDateTime;
+import example.booking.dto.BookingResponse;
+
 import java.util.List;
 
 public record ItemCommentResponse(
@@ -8,8 +9,8 @@ public record ItemCommentResponse(
         String name,
         String description,
         Boolean available,
-        LocalDateTime lastBooking,
-        LocalDateTime nextBooking,
+        BookingResponse lastBooking,
+        BookingResponse nextBooking,
         List<CommentResponse> comments
 ) {
 }

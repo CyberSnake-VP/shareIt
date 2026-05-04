@@ -6,6 +6,9 @@ import example.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentMapper {
 
@@ -16,6 +19,14 @@ public class CommentMapper {
                 comment.getAuthor().getName(),
                 comment.getCreatedDate().toLocalDateTime()
         );
+    }
+
+    public static List<CommentResponse> toCommentResponse(Iterable<Comment> comments) {
+        List<CommentResponse> response = new ArrayList<>();
+        for (Comment comment: comments) {
+            response.add(toCommentResponse(comment));
+        }
+        return response;
     }
 
     public static Comment toComment(CreateCommentRequest request, User author, Item item) {

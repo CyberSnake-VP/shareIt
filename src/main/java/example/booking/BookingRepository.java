@@ -14,8 +14,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
 
     List<Booking> findAllByBookerId(Long bookerId);
 
+    List<Booking> findAllByItemIdIn(List<Long> itemIds);
+
     default Optional<Booking> findBookingByBookerAndItem(Long bookerId, Long itemId, OffsetDateTime currentTime) {
         QBooking booking = QBooking.booking;
+
         BooleanExpression expression = booking.booker.id.eq(bookerId)
                 .and(booking.item.id.eq(itemId))
                 .and(booking.status.eq(BookingStatus.APPROVED))
@@ -104,4 +107,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
         iterable.forEach(result::add);
         return result;
     }
+
+    List<Booking> findAllByItemId(Long itemId);
 }

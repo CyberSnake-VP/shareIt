@@ -6,12 +6,17 @@ import example.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapper {
 
     public static BookingResponse toBookingResponse(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
+
         return new BookingResponse(
                 booking.getId(),
                 new BookingResponseShortItem(
@@ -23,8 +28,8 @@ public class BookingMapper {
                         booking.getBooker().getEmail(),
                         booking.getBooker().getName()
                 ),
-                booking.getStart().toLocalDateTime(),
-                booking.getEnd().toLocalDateTime(),
+                booking.getStart().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime(),
+                booking.getEnd().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime(),
                 booking.getStatus()
         );
     }
@@ -33,8 +38,8 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setItem(item);
         booking.setBooker(booker);
-        booking.setStart(request.start().atOffset(ZoneOffset.UTC));
-        booking.setEnd(request.end().atOffset(ZoneOffset.UTC));
+        booking.setStart(request.start().atZone(ZoneId.systemDefault()).toOffsetDateTime());
+        booking.setEnd(request.end().atZone(ZoneId.systemDefault()).toOffsetDateTime());
         return booking;
     }
 }

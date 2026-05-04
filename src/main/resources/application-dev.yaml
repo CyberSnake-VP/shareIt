@@ -6,7 +6,7 @@ spring:
     properties:
       hibernate:
         format_sql: true  # красивое форматирование SQL
-        show_sql: true    # показывать SQL в консоли
+        show_sql: false    # показывать SQL в консоли
         use_sql_comments: true   # комментарии в SQL
         jdbc:
           batch_size: 20  # батчинг для производительности
@@ -29,5 +29,5 @@ logging:
         web: info   # HTTP запросы
 
     org.hibernate:
-      SQL: info                         # SQL запросы
-      type: info
+      SQL: warn                         # SQL запросы
+      type: warn

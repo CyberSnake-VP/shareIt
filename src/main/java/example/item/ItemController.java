@@ -28,20 +28,19 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemResponse> getAll(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public List<ItemCommentResponse> getAll(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
         log.info("GET /items started: ownerId={}", ownerId);
-        List<ItemResponse> responses = itemService.getAll(ownerId);
+        List<ItemCommentResponse> responses = itemService.getAll(ownerId);
         log.info("GET /items completed: ownerId={}, items={}", ownerId, responses.size());
         return responses;
     }
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemResponse getById(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                                @PathVariable Long itemId) {
-        log.info("GET /items/{} started: ownerId={}", itemId, ownerId);
-        ItemResponse response = itemService.getById(itemId, ownerId);
-        log.info("GET /items/{} completed: ownerId={}, itemId={}", itemId, ownerId, response.id());
+    public ItemCommentResponse getById(@PathVariable Long itemId) {
+        log.info("GET /items/{} started:", itemId);
+        ItemCommentResponse response = itemService.getById(itemId);
+        log.info("GET /items/{} completed: itemId={}", itemId, response.id());
         return response;
     }
 

@@ -7,9 +7,9 @@ import java.util.List;
 public interface ItemService {
     ItemResponse create(Long ownerId, CreateItemRequest request);
 
-    List<ItemResponse> getAll(Long ownerId);
+    List<ItemCommentResponse> getAll(Long ownerId);
 
-    ItemResponse getById(Long itemId, Long ownerId);
+    ItemCommentResponse getById(Long itemId);
 
     ItemResponse update(Long itemId, Long ownerId, UpdateItemRequest request);
 
