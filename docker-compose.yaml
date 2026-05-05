@@ -9,7 +9,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB} # под-е к бд внутри контейнера
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      - TZ=${TZ}
+      - TZ=${TZ}  # чтобы установить в контейнере, для прохождения текстов
     depends_on:
       db:
         condition: service_healthy

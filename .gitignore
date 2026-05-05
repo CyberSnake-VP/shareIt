@@ -13,6 +13,7 @@ target/
 *.iml
 *.ipr
 
+application-local.yml
 .env
 
 ### Eclipse ###
