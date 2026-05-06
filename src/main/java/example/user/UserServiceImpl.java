@@ -76,9 +76,12 @@ public class UserServiceImpl implements UserService {
                     log.warn("Update user failed: not found userId={}", id);
                     return new NotFoundException(NOT_FOUND_USER_MESSAGE);
                 });
+
         User updated = UserMapper.toUser(request, oldUser);
+        User savedUser = userRepository.save(updated);
+
         log.info("Update user completed: userId={}", id);
-        return UserMapper.toUserResponse(updated);
+        return UserMapper.toUserResponse(savedUser);
     }
 
     @Override
