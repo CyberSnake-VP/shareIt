@@ -1,5 +1,6 @@
 package example.item;
 
+import example.request.Request;
 import example.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,4 +26,8 @@ public class Item {
     private String description;
 
     private boolean available;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private Request request;  // может быть null
 }

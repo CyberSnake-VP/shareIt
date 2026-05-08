@@ -14,8 +14,10 @@ CREATE TABLE IF NOT EXISTS items
     description varchar(1000) NOT NULL,
     available   boolean       NOT NULL,
     owner_id    BIGINT        NOT NULL,
+    request_id  BIGINT,
     CONSTRAINT pk_items PRIMARY KEY (id),
-    CONSTRAINT fk_items_users FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE CASCADE
+    CONSTRAINT fk_items_users FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_items_requests FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS bookings
@@ -44,15 +46,19 @@ CREATE TABLE IF NOT EXISTS comments
     CONSTRAINT fk_comments_users FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS requests(
-    id BIGINT GENERATED ALWAYS AS IDENTITY,
-    description varchar(1000),
-    requestor_id BIGINT,
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+CREATE TABLE IF NOT EXISTS requests
+(
+    id           BIGINT GENERATED ALWAYS AS IDENTITY,
+    description  varchar(1000)               NOT NULL,
+    requestor_id BIGINT                      NOT NULL,
+    created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT pk_requests PRIMARY KEY (id),
-    CONSTRAINT fk_requests_users
-
+    CONSTRAINT fk_requests_users FOREIGN KEY (requestor_id) REFERENCES users (id) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_requests_requestor_id ON requests (requestor_id);
+CREATE INDEX IF NOT EXISTS idx_requests_created ON requests (created);
+
 
 CREATE INDEX IF NOT EXISTS idx_comments_item_id ON comments (item_id);
 CREATE INDEX IF NOT EXISTS idx_comments_author_id ON comments (author_id);
