@@ -1,11 +1,27 @@
 services:
-  app:
-    build: . # образ из Dockerfile лежит в текущей папке
-    container_name: shareit-app
+   # ========== GATEWAY ==========
+  gateway:
+    build: ./gateway
+    container_name: shareit-gateway
     ports:
-      - "8080:8080" # Мой порт слева, внутри контейнера справа
+      - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILE} # используем профиль для docker
+      - SPRING_PROFILES_ACTIVE=docker
+      - SHAREIT_SERVER_URL=http://server:8080
+    depends_on:
+       server:
+         condition: service_started
+    networks:
+      - shareit-network
+
+
+  server:
+    build: ./server # образ из Dockerfile лежит в текущей папке
+    container_name: shareit-server
+    ports:
+      - "9090:8080" # Мой порт слева, внутри контейнера справа
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker # используем профиль для docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB} # под-е к бд внутри контейнера
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}

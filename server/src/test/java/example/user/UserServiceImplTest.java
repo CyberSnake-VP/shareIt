@@ -166,7 +166,7 @@ class UserServiceImplTest {
 
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, ()-> userService.updateUser(99L, request));
+        assertThrows(NotFoundException.class, () -> userService.updateUser(99L, request));
 
         verify(userRepository, never()).save(any());
     }

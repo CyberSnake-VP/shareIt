@@ -44,6 +44,16 @@ CREATE TABLE IF NOT EXISTS comments
     CONSTRAINT fk_comments_users FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS requests(
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    description varchar(1000),
+    requestor_id BIGINT,
+    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT pk_requests PRIMARY KEY (id),
+    CONSTRAINT fk_requests_users
+
+);
+
 CREATE INDEX IF NOT EXISTS idx_comments_item_id ON comments (item_id);
 CREATE INDEX IF NOT EXISTS idx_comments_author_id ON comments (author_id);
 CREATE INDEX IF NOT EXISTS idx_comments_created_date ON comments (created_date DESC);
