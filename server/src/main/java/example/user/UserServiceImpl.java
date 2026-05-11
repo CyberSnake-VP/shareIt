@@ -2,10 +2,6 @@ package example.user;
 
 import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
-import example.user.dto.CreateUserRequest;
-import example.user.dto.UpdateUserRequest;
-import example.user.dto.UserMapper;
-import example.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

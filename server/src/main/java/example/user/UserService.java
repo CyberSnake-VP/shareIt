@@ -1,9 +1,5 @@
 package example.user;
 
-import example.user.dto.CreateUserRequest;
-import example.user.dto.UpdateUserRequest;
-import example.user.dto.UserResponse;
-
 import java.util.List;
 
 public interface UserService {

@@ -2,9 +2,6 @@ package example.user;
 
 import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
-import example.user.dto.CreateUserRequest;
-import example.user.dto.UpdateUserRequest;
-import example.user.dto.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

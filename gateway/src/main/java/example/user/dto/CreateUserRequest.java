@@ -13,5 +13,4 @@ public record CreateUserRequest(
         @Email(message = "Email is invalid", regexp = ".+@.+\\..+")
         String email
 ) {
-
 }

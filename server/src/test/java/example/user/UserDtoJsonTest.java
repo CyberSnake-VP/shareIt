@@ -1,6 +1,5 @@
 package example.user;
 
-import example.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

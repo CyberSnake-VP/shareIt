@@ -1,8 +1,5 @@
 package example.user;
 
-import example.user.dto.CreateUserRequest;
-import example.user.dto.UpdateUserRequest;
-import example.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

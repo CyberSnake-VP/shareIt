@@ -1,6 +1,5 @@
-package example.user.dto;
+package example.user;
 
-import example.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

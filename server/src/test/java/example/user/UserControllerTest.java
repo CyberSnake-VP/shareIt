@@ -1,7 +1,6 @@
 package example.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import example.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
