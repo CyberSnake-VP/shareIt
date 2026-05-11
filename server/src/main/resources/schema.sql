@@ -7,6 +7,16 @@ CREATE TABLE IF NOT EXISTS users
     CONSTRAINT unique_users_email UNIQUE (email)
 );
 
+CREATE TABLE IF NOT EXISTS requests
+(
+    id           BIGINT GENERATED ALWAYS AS IDENTITY,
+    description  varchar(1000)               NOT NULL,
+    requestor_id BIGINT                      NOT NULL,
+    created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT pk_requests PRIMARY KEY (id),
+    CONSTRAINT fk_requests_users FOREIGN KEY (requestor_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY,
@@ -46,15 +56,6 @@ CREATE TABLE IF NOT EXISTS comments
     CONSTRAINT fk_comments_users FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS requests
-(
-    id           BIGINT GENERATED ALWAYS AS IDENTITY,
-    description  varchar(1000)               NOT NULL,
-    requestor_id BIGINT                      NOT NULL,
-    created      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    CONSTRAINT pk_requests PRIMARY KEY (id),
-    CONSTRAINT fk_requests_users FOREIGN KEY (requestor_id) REFERENCES users (id) ON DELETE CASCADE
-);
 
 CREATE INDEX IF NOT EXISTS idx_requests_requestor_id ON requests (requestor_id);
 CREATE INDEX IF NOT EXISTS idx_requests_created ON requests (created);
@@ -84,10 +85,8 @@ CREATE INDEX IF NOT EXISTS idx_bookings_owner_status ON bookings (item_id, statu
 
 -- ✅ Обязательно (частые запросы по владельцу)
 CREATE INDEX IF NOT EXISTS idx_items_owner_id ON items (owner_id);
-
 -- ✅ Для поиска по доступности
 CREATE INDEX IF NOT EXISTS idx_items_available ON items (available);
-
 -- Для поиска по названию
 CREATE INDEX IF NOT EXISTS idx_items_name ON items (name);
-
+CREATE INDEX IF NOT EXISTS idx_items_request_id ON items(request_id);

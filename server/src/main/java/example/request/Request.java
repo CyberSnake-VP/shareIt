@@ -21,7 +21,7 @@ public class Request {
     private String description;
 
     @Column(name = "requestor_id", nullable = false)
-    private Long requestor;
+    private Long requestorId;
 
     @Column(nullable = false)
     private LocalDateTime created = LocalDateTime.now();

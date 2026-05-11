@@ -12,4 +12,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
 
     List<Item> findAllByOwnerId(Long ownerId);
 
+    List<Item> findAllByRequestIdIn(List<Long> requestIds);
+
+    List<Item> findAllByRequestId(Long id);
 }

@@ -27,7 +27,6 @@ public class Item {
 
     private boolean available;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id")
-    private Request request;  // может быть null
+    @Column(name = "request_id")
+    private Long requestId;  // может быть null
 }

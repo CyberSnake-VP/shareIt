@@ -29,6 +29,7 @@ public class ItemMapper {
         item.setDescription(request.description());
         item.setAvailable(request.available());
         item.setOwner(owner);
+        item.setRequestId(request.requestId());
         return item;
     }
 

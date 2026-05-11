@@ -9,6 +9,7 @@ public record CreateItemRequest(
         @NotBlank(message = "Description is required")
         String description,
         @NotNull(message = "Available is required")
-        Boolean available
+        Boolean available,
+        Long requestId
 ) {
 }
