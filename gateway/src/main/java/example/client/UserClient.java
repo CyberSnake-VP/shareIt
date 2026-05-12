@@ -33,7 +33,7 @@ public class UserClient extends BaseClient{
 
     // создаем методы для контроллера
     public ResponseEntity<Object> updateUser(Long userId, UpdateUserRequest request) {
-        return patch("/" + userId, null, request);
+        return patch("/" + userId, request);
     }
 
     public ResponseEntity<Object> getById(Long userId) {

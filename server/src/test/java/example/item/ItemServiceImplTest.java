@@ -1,9 +1,5 @@
 package example.item;
 
-import example.item.dto.CreateItemRequest;
-import example.item.dto.ItemCommentResponse;
-import example.item.dto.ItemResponse;
-import example.item.dto.UpdateItemRequest;
 import example.user.UserService;
 import example.user.CreateUserRequest;
 import example.user.UserResponse;

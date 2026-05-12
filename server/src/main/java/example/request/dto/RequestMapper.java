@@ -1,6 +1,6 @@
 package example.request.dto;
 
-import example.item.dto.ItemResponse;
+import example.item.ItemResponse;
 import example.request.Request;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package example.item.dto;
+package example.item;
 
 import java.time.LocalDateTime;
 

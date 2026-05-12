@@ -9,7 +9,6 @@ import example.booking.dto.BookingResponse;
 import example.exception.BookingConflictException;
 import example.exception.ConditionNotMetException;
 import example.exception.NotFoundException;
-import example.item.dto.*;
 import example.user.User;
 import example.user.UserRepository;
 import lombok.RequiredArgsConstructor;

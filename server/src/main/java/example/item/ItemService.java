@@ -1,7 +1,5 @@
 package example.item;
 
-import example.item.dto.*;
-
 import java.util.List;
 
 public interface ItemService {

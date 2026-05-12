@@ -3,8 +3,8 @@ package example.request;
 import example.exception.NotFoundException;
 import example.item.Item;
 import example.item.ItemRepository;
-import example.item.dto.ItemMapper;
-import example.item.dto.ItemResponse;
+import example.item.ItemMapper;
+import example.item.ItemResponse;
 import example.request.dto.CreateRequestDto;
 import example.request.dto.RequestMapper;
 import example.request.dto.RequestResponse;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

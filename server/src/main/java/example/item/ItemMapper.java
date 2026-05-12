@@ -1,8 +1,6 @@
-package example.item.dto;
+package example.item;
 
 import example.booking.dto.BookingResponse;
-import example.item.Comment;
-import example.item.Item;
 import example.user.User;
 import lombok.NoArgsConstructor;
 

@@ -1,7 +1,5 @@
-package example.item.dto;
+package example.item;
 
-import example.item.Comment;
-import example.item.Item;
 import example.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

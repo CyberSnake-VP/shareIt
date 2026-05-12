@@ -1,8 +1,6 @@
 package example.item;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import example.item.dto.CreateItemRequest;
-import example.item.dto.ItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

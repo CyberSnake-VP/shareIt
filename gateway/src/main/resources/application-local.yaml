@@ -3,3 +3,7 @@ server:
 
 shareit-server:
   url: http://localhost:9090
+
+spring:
+  main:
+    banner-mode: off

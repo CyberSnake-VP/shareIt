@@ -1,4 +1,4 @@
-package example.item.dto;
+package example.item;
 
 public record UpdateItemRequest(
         String name,
