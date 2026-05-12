@@ -27,13 +27,13 @@ public class UserClient extends BaseClient{
     }
 
     // создаем чистые методы для нашей задачи, где выбираем подходящий метод из базового репо
-    public ResponseEntity<Object> createUser (CreateUserRequest request) {
-        return post("",null, request);
+    public ResponseEntity<Object> createUser (CreateUserRequest body) {
+        return post("",null, body);
     }
 
     // создаем методы для контроллера
-    public ResponseEntity<Object> updateUser(Long userId, UpdateUserRequest request) {
-        return patch("/" + userId, request);
+    public ResponseEntity<Object> updateUser(Long userId, UpdateUserRequest body) {
+        return patch("/" + userId, body);
     }
 
     public ResponseEntity<Object> getById(Long userId) {

@@ -38,17 +38,18 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable long id) {
+    public ResponseEntity<Object> getById(@PathVariable long id,
+                                          @RequestHeader(ItemClient.USER_ID_HEADER) long ownerId) {
         log.info("GET /items/{} on server started", id);
-        ResponseEntity<Object> response = client.getById(id);
+        ResponseEntity<Object> response = client.getById(id, ownerId);
         log.info("GET /items/{} on server finished", id);
         return response;
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(@RequestHeader(ItemClient.USER_ID_HEADER) long ownerId) {
+    public ResponseEntity<Object> getAllByOwner(@RequestHeader(ItemClient.USER_ID_HEADER) long ownerId) {
         log.info("GET /items on server started");
-        ResponseEntity<Object> response = client.getAll(ownerId);
+        ResponseEntity<Object> response = client.getAllByOwner(ownerId);
         log.info("GET /items on server finished");
         return response;
     }
@@ -58,7 +59,7 @@ public class ItemController {
                                              @PathVariable long id,
                                              @RequestBody @Valid CreateCommentRequest request) {
         log.info("POST /items/{}/comment on server stared for ownerId={}", id, ownerId);
-        ResponseEntity<Object> response = client.addComment(ownerId, id, request);
+        ResponseEntity<Object> response = client.addComment(id, ownerId, request);
         log.info("POST /items/{}/comment on server finished for ownerId={}", id, ownerId);
         return response;
     }
