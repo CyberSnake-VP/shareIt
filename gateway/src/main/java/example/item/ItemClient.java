@@ -1,5 +1,6 @@
-package example.client;
+package example.item;
 
+import example.BaseClient;
 import example.item.dto.CreateCommentRequest;
 import example.item.dto.CreateItemRequest;
 import example.item.dto.UpdateItemRequest;

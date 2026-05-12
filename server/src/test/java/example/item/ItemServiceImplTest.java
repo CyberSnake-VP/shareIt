@@ -42,7 +42,7 @@ class ItemServiceImplTest {
 
     @Test
     void create() {
-        CreateItemRequest requestItem = new CreateItemRequest("Hammer", "destroy", true);
+        CreateItemRequest requestItem = new CreateItemRequest("Hammer", "destroy", true, null);
 
         // when
         ItemResponse response = itemService.create(ownerId, requestItem);
@@ -63,7 +63,7 @@ class ItemServiceImplTest {
 
     @Test
     void getAll() {
-        CreateItemRequest requestItem = new CreateItemRequest("Hammer", "destroy", true);
+        CreateItemRequest requestItem = new CreateItemRequest("Hammer", "destroy", true, null);
         itemService.create(ownerId, requestItem);
 
         // when
@@ -88,7 +88,7 @@ class ItemServiceImplTest {
 
     @Test
     void getById() {
-        CreateItemRequest requestItem = new CreateItemRequest("Hammer", "destroy", true);
+        CreateItemRequest requestItem = new CreateItemRequest("Hammer", "destroy", true, null);
         itemService.create(ownerId, requestItem);
 
         ItemCommentResponse result = itemService.getById(ownerId);
@@ -109,7 +109,7 @@ class ItemServiceImplTest {
 
     @Test
     void update() {
-        CreateItemRequest savedItem = new CreateItemRequest("Hammer", "destroy", true);
+        CreateItemRequest savedItem = new CreateItemRequest("Hammer", "destroy", true,null);
         UpdateItemRequest updatedItem = new UpdateItemRequest("Кувалда", "Убивашка", false);
 
         ItemResponse created = itemService.create(ownerId, savedItem);

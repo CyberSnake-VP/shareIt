@@ -37,7 +37,8 @@ class ItemControllerWithContextTest {
     private CreateItemRequest request = new CreateItemRequest(
             "Hammer",
             "Xuyak",
-            true);
+            true,
+            1L);
 
     @Test
     void create() throws Exception {

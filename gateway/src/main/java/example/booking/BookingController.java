@@ -2,7 +2,6 @@ package example.booking;
 
 import example.booking.dto.BookingState;
 import example.booking.dto.CreateBookingRequest;
-import example.client.BookingClient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

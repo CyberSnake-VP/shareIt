@@ -1,7 +1,6 @@
 package example.user;
 
 
-import example.client.UserClient;
 import example.user.dto.CreateUserRequest;
 import example.user.dto.UpdateUserRequest;
 import jakarta.validation.Valid;
@@ -53,7 +52,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete (@PathVariable long id) {
+    public ResponseEntity<Object> delete(@PathVariable long id) {
         log.info("DELETE /users/{} on server started: ", id);
         ResponseEntity<Object> response = client.deleteUser(id);
         log.info("DELETE /users/{} on server finished:", id);

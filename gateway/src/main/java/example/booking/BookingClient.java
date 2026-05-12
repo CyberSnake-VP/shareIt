@@ -1,5 +1,6 @@
-package example.client;
+package example.booking;
 
+import example.BaseClient;
 import example.booking.dto.BookingState;
 import example.booking.dto.CreateBookingRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,7 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> updateStatus(long id, long bookerId, boolean approved) {
-        Map<String, Object> params = Map.of("id", id,"approved", approved);
+        Map<String, Object> params = Map.of("id", id, "approved", approved);
         return patch("/{id}?approved={approved}", bookerId, params, null);
     }
 

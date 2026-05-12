@@ -1,4 +1,4 @@
-package example.client;
+package example;
 
 import jakarta.annotation.Nullable;
 import org.springframework.http.*;
@@ -17,7 +17,6 @@ public class BaseClient {
     }
 
 
-
     // формируем get запрос с userId, и списком параметров
     protected ResponseEntity<Object> get(String path, Long userId, @Nullable Map<String, Object> parameters) {
         return makeAndSendRequest(HttpMethod.GET, path, userId, parameters, null);
@@ -25,9 +24,10 @@ public class BaseClient {
 
     // два метода get обертки, используем метод get со всем списком возможных параметров.
     // только запрос /requests
-    protected  ResponseEntity<Object> get(String path) {
+    protected ResponseEntity<Object> get(String path) {
         return get(path, null, null);
     }
+
     // requests и в заголовке userId
     protected ResponseEntity<Object> get(String path, Long userId) {
         return get(path, userId, null);
@@ -37,10 +37,12 @@ public class BaseClient {
     protected <T> ResponseEntity<Object> post(String path, Long userId, @Nullable Map<String, Object> parameters, T body) {
         return makeAndSendRequest(HttpMethod.POST, path, userId, parameters, body);
     }
+
     // путь, заголовок userId, тело запроса
-    protected <T> ResponseEntity<Object> post(String path, Long userId, T body)  {
+    protected <T> ResponseEntity<Object> post(String path, Long userId, T body) {
         return post(path, userId, null, body);
     }
+
     protected <T> ResponseEntity<Object> post(String path, T body) {
         return post(path, null, null, body);
     }
@@ -49,10 +51,12 @@ public class BaseClient {
     protected <T> ResponseEntity<Object> put(String path, Long userId, @Nullable Map<String, Object> parameters, T body) {
         return makeAndSendRequest(HttpMethod.PUT, path, userId, parameters, body);
     }
+
     protected <T> ResponseEntity<Object> put(String path, Long userId, T body) {
         return put(path, userId, null, body);
     }
-    protected <T>ResponseEntity<Object> put(String path, T body) {
+
+    protected <T> ResponseEntity<Object> put(String path, T body) {
         return put(path, null, null, body);
     }
 
@@ -60,9 +64,11 @@ public class BaseClient {
     protected <T> ResponseEntity<Object> patch(String path, Long userId, @Nullable Map<String, Object> parameters, T body) {
         return makeAndSendRequest(HttpMethod.PATCH, path, userId, parameters, body);
     }
+
     protected <T> ResponseEntity<Object> patch(String path, Long userId, T body) {
         return patch(path, userId, null, body);
     }
+
     protected <T> ResponseEntity<Object> patch(String path, T body) {
         return patch(path, null, null, body);
     }
@@ -71,9 +77,11 @@ public class BaseClient {
     protected ResponseEntity<Object> delete(String path, Long userId, @Nullable Map<String, Object> parameters) {
         return makeAndSendRequest(HttpMethod.DELETE, path, userId, parameters, null);
     }
+
     protected ResponseEntity<Object> delete(String path, Long userId) {
         return delete(path, userId, null);
     }
+
     protected ResponseEntity<Object> delete(String path) {
         return delete(path, null, null);
     }

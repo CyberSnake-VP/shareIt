@@ -46,7 +46,7 @@ public class RequestController {
         return requests;
     }
 
-    @GetMapping()
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<RequestResponseWithItems> getByRequestor(@RequestHeader("X-Sharer-User-Id") long requestorId) {
         log.info("GET /requests started: requestorId={}", requestorId);
