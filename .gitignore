@@ -14,7 +14,7 @@ target/
 *.ipr
 
 application-local.yml
-application-docker.yaml
+application-local.yaml
 .env
 
 ### Eclipse ###
