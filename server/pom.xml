@@ -69,6 +69,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>example.ShareItApp</mainClass>
+                </configuration>
+            </plugin>
+
             <!-- QueryDSL генерация Q-классов -->
             <plugin>
                 <groupId>com.mysema.maven</groupId>
